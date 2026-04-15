@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 포트폴리오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0f;
+  --bg2: #141416;
+  --bg3: #1c1c1f;
+  --surface: #222226;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0ede8;
+  --muted: #888885;
+  --accent: #c8a97e;
+  --accent2: #e8c99e;
+  --accent-dim: rgba(200,169,126,0.12);
+  --danger: #e05c5c;
+  --success: #5cb85c;
+  --serif: 'Noto Serif KR', serif;
+  --sans: 'Noto Sans KR', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.7; min-height: 100vh; }
+
+/* 네비게이션 */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 64px;
+  background: rgba(13,13,15,0.88); backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-family: var(--serif); font-size: 15px; color: var(--accent); letter-spacing: 0.08em; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+#adminBtn {
+  font-size: 12px; padding: 6px 14px; border-radius: 20px;
+  border: 0.5px solid var(--border2); background: transparent;
+  color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: var(--sans);
+}
+#adminBtn:hover { color: var(--accent); border-color: var(--accent); }
+#adminBtn.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+
+/* 히어로 */
+#hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(200,169,126,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 680px; position: relative; }
+.hero-avatar {
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 2px solid var(--accent); margin: 0 auto 2rem;
+  object-fit: cover; background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
+}
+.hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.hero-avatar-placeholder { font-size: 42px; line-height: 1; }
+.hero-name { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.hero-tagline { font-size: 15px; color: var(--accent); margin-bottom: 1.5rem; letter-spacing: 0.06em; }
+.hero-bio { font-size: 15px; color: var(--muted); line-height: 1.9; max-width: 500px; margin: 0 auto 2.5rem; }
+.hero-scroll { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--accent), transparent); }
+
+/* 섹션 공통 */
+section { padding: 6rem 2rem; max-width: 960px; margin: 0 auto; }
+.section-label { font-size: 11px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; }
+.section-title { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; color: var(--text); margin-bottom: 3rem; }
+
+/* 자기소개 */
+#about .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.about-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 1.75rem 2rem;
+}
+.about-card h3 { font-size: 14px; color: var(--accent); margin-bottom: 1rem; letter-spacing: 0.08em; }
+.about-card p { font-size: 14px; color: var(--muted); line-height: 1.9; }
+
+/* 활동 타임라인 */
+#activities .timeline { position: relative; padding-left: 2rem; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: var(--border2); }
+.tl-item { position: relative; margin-bottom: 2.5rem; }
+.tl-dot { position: absolute; left: -2rem; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+.tl-date { font-size: 12px; color: var(--accent); margin-bottom: 4px; letter-spacing: 0.06em; }
+.tl-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.8; }
+.tl-controls { display: flex; gap: 8px; margin-top: 8px; }
+
+/* 프로젝트 */
+#projects .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.project-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 1.75rem; transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.project-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.project-tag { display: inline-block; font-size: 11px; color: var(--accent); background: var(--accent-dim); padding: 3px 10px; border-radius: 20px; margin-bottom: 1rem; letter-spacing: 0.06em; }
+.project-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 0.75rem; }
+.project-desc { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+.project-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-pill { font-size: 11px; padding: 3px 10px; border: 0.5px solid var(--border2); border-radius: 20px; color: var(--muted); }
+
+/* 갤러리 */
+#gallery .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.gallery-item {
+  aspect-ratio: 1; background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 12px; overflow: hidden; position: relative; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.gallery-item:hover { border-color: var(--accent); }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-empty { font-size: 13px; color: var(--muted); text-align: center; padding: 3rem; background: var(--surface); border-radius: 12px; border: 0.5px dashed var(--border2); }
+.gallery-add-btn {
+  aspect-ratio: 1; background: transparent; border: 0.5px dashed var(--border2);
+  border-radius: 12px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; cursor: pointer; color: var(--muted);
+  font-size: 12px; transition: all 0.2s; font-family: var(--sans);
+}
+.gallery-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+.gallery-add-btn span { font-size: 24px; }
+
+/* 동영상 */
+#videos .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.video-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; overflow: hidden; }
+.video-frame { width: 100%; aspect-ratio: 16/9; border: none; }
+.video-info { padding: 1rem 1.25rem; }
+.video-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.video-desc { font-size: 12px; color: var(--muted); }
+.video-add {
+  background: transparent; border: 0.5px dashed var(--border2); border-radius: 16px;
+  aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; cursor: pointer; color: var(--muted);
+  font-size: 13px; font-family: var(--sans); transition: all 0.2s; width: 100%;
+}
+.video-add:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 연락처 */
+#contact .contact-inner { max-width: 560px; }
+.contact-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.contact-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 0.5px solid var(--border); }
+.contact-row:last-child { border-bottom: none; }
+.contact-icon { font-size: 16px; width: 32px; }
+.contact-label { font-size: 13px; color: var(--muted); width: 80px; flex-shrink: 0; }
+.contact-value { font-size: 14px; color: var(--text); flex: 1; }
+.contact-value a { color: var(--accent); text-decoration: none; }
+
+/* 푸터 */
+footer { text-align: center; padding: 3rem 2rem; border-top: 0.5px solid var(--border); color: var(--muted); font-size: 13px; }
+
+/* 관리자 편집 UI */
+.edit-btn {
+  display: none; position: absolute; top: 10px; right: 10px;
+  font-size: 11px; padding: 4px 10px; border-radius: 6px;
+  background: var(--accent-dim); color: var(--accent); border: 0.5px solid var(--accent);
+  cursor: pointer; font-family: var(--sans); z-index: 10;
+}
+.admin-mode .edit-btn { display: inline-flex; align-items: center; gap: 4px; }
+.admin-mode .edit-btn::before { content: '✏️'; font-size: 10px; }
+.admin-mode [contenteditable] { outline: 1px dashed rgba(200,169,126,0.4); border-radius: 4px; min-width: 10px; }
+.admin-bar {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--bg3); border-top: 0.5px solid var(--accent);
+  padding: 0.75rem 2rem; font-size: 13px; color: var(--accent);
+  align-items: center; gap: 1rem;
+}
+.admin-bar.show { display: flex; }
+.save-btn {
+  padding: 6px 18px; background: var(--accent); color: var(--bg); border: none;
+  border-radius: 6px; cursor: pointer; font-size: 12px; font-family: var(--sans); font-weight: 500;
+}
+.save-btn:hover { background: var(--accent2); }
+
+/* 모달 */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg2); border: 0.5px solid var(--border2);
+  border-radius: 16px; padding: 2rem; width: 90%; max-width: 420px;
+}
+.modal h3 { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 1.5rem; }
+.modal label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; letter-spacing: 0.06em; }
+.modal input, .modal textarea {
+  width: 100%; background: var(--surface); border: 0.5px solid var(--border2);
+  border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 14px;
+  font-family: var(--sans); margin-bottom: 1rem; outline: none;
+}
+.modal input:focus, .modal textarea:focus { border-color: var(--accent); }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 0.5rem; }
+.btn-cancel { padding: 8px 16px; background: transparent; border: 0.5px solid var(--border2); border-radius: 8px; color: var(--muted); cursor: pointer; font-size: 13px; font-family: var(--sans); }
+.btn-ok { padding: 8px 20px; background: var(--accent); border: none; border-radius: 8px; color: var(--bg); cursor: pointer; font-size: 13px; font-family: var(--sans); font-weight: 500; }
+.error-msg { font-size: 12px; color: var(--danger); margin-bottom: 0.75rem; min-height: 16px; }
+
+/* 라이트박스 */
+#lightbox {
+  display: none; position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+}
+#lightbox.show { display: flex; }
+#lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+#lightbox .lb-close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 28px; color: var(--muted); cursor: pointer; }
+#lightbox .lb-del { position: absolute; bottom: 1.5rem; right: 1.5rem; padding: 8px 18px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: var(--sans); }
+
+@media (max-width: 700px) {
+  nav { padding: 0 1.2rem; }
+  .nav-links { display: none; }
+  #about .about-grid { grid-template-columns: 1fr; }
+  section { padding: 4rem 1.2rem; }
+}
+
+/* 애니메이션 */
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="nav-logo" id="siteName">Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#hero">홈</a></li>
+    <li><a href="#about">소개</a></li>
+    <li><a href="#activities">활동</a></li>
+    <li><a href="#projects">프로젝트</a></li>
+    <li><a href="#gallery">작품</a></li>
+    <li><a href="#videos">영상</a></li>
+    <li><a href="#contact">연락처</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button id="adminBtn" onclick="toggleAdmin()">관리자</button>
+  </div>
+</nav>
+
+<!-- 히어로 -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-avatar" id="avatarWrap">
+      <div class="hero-avatar-placeholder" id="avatarPlaceholder">👤</div>
+      <img id="avatarImg" style="display:none;" />
+    </div>
+    <h1 class="hero-name" id="heroName" contenteditable="false">홍길동</h1>
+    <p class="hero-tagline" id="heroTagline" contenteditable="false">꿈을 향해 성장하는 고등학생</p>
+    <p class="hero-bio" id="heroBio" contenteditable="false">
+      안녕하세요! 저는 배움을 즐기고 도전을 두려워하지 않는 고등학생입니다. 다양한 경험과 프로젝트를 통해 성장해왔으며, 앞으로도 끊임없이 발전하고자 합니다.
+    </p>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>SCROLL</span>
+    </div>
+    <button class="edit-btn" onclick="editHero()">프로필 편집</button>
+  </div>
+</section>
+
+<!-- 자기소개 -->
+<section id="about" class="fade-in">
+  <div class="section-label">About Me</div>
+  <h2 class="section-title">자기소개</h2>
+  <div class="about-grid" id="aboutGrid">
+    <div class="about-card" style="position:relative;">
+      <h3>가치관</h3>
+      <p id="aboutVal" contenteditable="false">끊임없는 성장과 배움을 가장 중요한 가치로 여깁니다. 어떤 상황에서도 긍정적인 태도로 임하며, 주변 사람들과 함께 성장하는 것을 추구합니다.</p>
+      <button class="edit-btn" onclick="editAbout('aboutVal')">편집</button>
+    </div>
+    <div class="about-card" style="position:relative;">
+      <h3>목표</h3>
+      <p id="aboutGoal" contenteditable="false">기술과 인문학의 경계를 넘나들며 사회에 긍정적인 영향을 미치는 사람이 되고 싶습니다. 대학에서 깊이 있는 학문을 탐구하겠습니다.</p>
+      <button class="edit-btn" onclick="editAbout('aboutGoal')">편집</button>
+    </div>
+    <div class="about-card" style="position:relative;">
+      <h3>강점</h3>
+      <p id="aboutStrength" contenteditable="false">문제를 다각도로 분석하는 논리적 사고력과 새로운 것에 빠르게 적응하는 능력이 제 강점입니다. 팀 프로젝트에서 협업과 소통을 중시합니다.</p>
+      <button class="edit-btn" onclick="editAbout('aboutStrength')">편집</button>
+    </div>
+    <div class="about-card" style="position:relative;">
+      <h3>관심 분야</h3>
+      <p id="aboutInterest" contenteditable="false">인공지능, 환경 과학, 사회적 기업가 정신에 깊은 관심을 가지고 있습니다. 독서와 글쓰기, 음악 감상을 즐깁니다.</p>
+      <button class="edit-btn" onclick="editAbout('aboutInterest')">편집</button>
+    </div>
+  </div>
+</section>
+
+<!-- 교내외 활동 -->
+<section id="activities" class="fade-in">
+  <div class="section-label">Activities</div>
+  <h2 class="section-title">주요 교내외 활동</h2>
+  <div class="timeline" id="timeline">
+    <!-- JS로 렌더링 -->
+  </div>
+  <button id="addActivityBtn" class="edit-btn" style="position:static;display:none;margin-top:1.5rem;" onclick="openAddActivity()">+ 활동 추가</button>
+</section>
+
+<!-- 프로젝트 -->
+<section id="projects" class="fade-in">
+  <div class="section-label">Projects</div>
+  <h2 class="section-title">프로젝트 경험</h2>
+  <div class="project-grid" id="projectGrid">
+    <!-- JS로 렌더링 -->
+  </div>
+  <button id="addProjectBtn" class="edit-btn" style="position:static;display:none;margin-top:1.5rem;" onclick="openAddProject()">+ 프로젝트 추가</button>
+</section>
+
+<!-- 작품 갤러리 -->
+<section id="gallery" class="fade-in">
+  <div class="section-label">Gallery</div>
+  <h2 class="section-title">작품 갤러리</h2>
+  <div class="gallery-grid" id="galleryGrid">
+    <!-- JS로 렌더링 -->
+  </div>
+</section>
+
+<!-- 동영상 -->
+<section id="videos" class="fade-in">
+  <div class="section-label">Videos</div>
+  <h2 class="section-title">동영상</h2>
+  <div class="video-grid" id="videoGrid">
+    <!-- JS로 렌더링 -->
+  </div>
+  <button id="addVideoBtn" class="edit-btn" style="position:static;display:none;margin-top:1.5rem;" onclick="openAddVideo()">+ 영상 추가</button>
+</section>
+
+<!-- 연락처 -->
+<section id="contact" class="fade-in">
+  <div class="section-label">Contact</div>
+  <h2 class="section-title">연락처</h2>
+  <div class="contact-inner">
+    <div class="contact-card" style="position:relative;" id="contactCard">
+      <!-- JS로 렌더링 -->
+    </div>
+    <button class="edit-btn" style="position:static;display:none;" id="editContactBtn" onclick="openEditContact()">✏️ 연락처 편집</button>
+  </div>
+</section>
+
+<footer>
+  <p id="footerText">© 2026 홍길동 포트폴리오. All rights reserved.</p>
+</footer>
+
+<!-- 관리자 바 -->
+<div class="admin-bar" id="adminBar">
+  <span>🔐 관리자 모드 활성화</span>
+  <button class="save-btn" onclick="saveData()">저장하기</button>
+  <button class="btn-cancel" onclick="logout()" style="font-size:12px;">로그아웃</button>
+</div>
+
+<!-- 로그인 모달 -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h3>관리자 로그인</h3>
+    <label>아이디</label>
+    <input type="text" id="loginId" placeholder="아이디 입력" />
+    <label>비밀번호</label>
+    <input type="password" id="loginPw" placeholder="비밀번호 입력" />
+    <div class="error-msg" id="loginErr"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('loginModal')">취소</button>
+      <button class="btn-ok" onclick="doLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 히어로 편집 모달 -->
+<div class="modal-overlay" id="heroModal">
+  <div class="modal">
+    <h3>프로필 편집</h3>
+    <label>사이트명</label>
+    <input type="text" id="editSiteName" />
+    <label>이름</label>
+    <input type="text" id="editHeroName" />
+    <label>한줄 소개</label>
+    <input type="text" id="editHeroTagline" />
+    <label>소개 문장</label>
+    <textarea id="editHeroBio" rows="3"></textarea>
+    <label>프로필 사진 (선택)</label>
+    <input type="file" id="editAvatarFile" accept="image/*" />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('heroModal')">취소</button>
+      <button class="btn-ok" onclick="saveHero()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 활동 추가/편집 모달 -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal">
+    <h3 id="actModalTitle">활동 추가</h3>
+    <label>날짜 (예: 2025.03)</label>
+    <input type="text" id="actDate" />
+    <label>활동명</label>
+    <input type="text" id="actTitle" />
+    <label>설명</label>
+    <textarea id="actDesc" rows="3"></textarea>
+    <input type="hidden" id="actIdx" value="-1" />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('activityModal')">취소</button>
+      <button class="btn-ok" onclick="saveActivity()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 프로젝트 추가/편집 모달 -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <h3 id="prjModalTitle">프로젝트 추가</h3>
+    <label>분류 태그 (예: 웹 개발)</label>
+    <input type="text" id="prjTag" />
+    <label>프로젝트명</label>
+    <input type="text" id="prjTitle" />
+    <label>설명</label>
+    <textarea id="prjDesc" rows="3"></textarea>
+    <label>기술 스택 (쉼표로 구분)</label>
+    <input type="text" id="prjSkills" placeholder="예: HTML, CSS, JavaScript" />
+    <input type="hidden" id="prjIdx" value="-1" />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('projectModal')">취소</button>
+      <button class="btn-ok" onclick="saveProject()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 동영상 추가 모달 -->
+<div class="modal-overlay" id="videoModal">
+  <div class="modal">
+    <h3>영상 추가</h3>
+    <label>제목</label>
+    <input type="text" id="vidTitle" />
+    <label>설명</label>
+    <input type="text" id="vidDesc" />
+    <label>YouTube URL 또는 임베드 URL</label>
+    <input type="text" id="vidUrl" placeholder="https://www.youtube.com/watch?v=..." />
+    <input type="hidden" id="vidIdx" value="-1" />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('videoModal')">취소</button>
+      <button class="btn-ok" onclick="saveVideo()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 연락처 편집 모달 -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3>연락처 편집</h3>
+    <label>이메일</label>
+    <input type="text" id="ctEmail" />
+    <label>전화번호</label>
+    <input type="text" id="ctPhone" />
+    <label>Instagram / SNS</label>
+    <input type="text" id="ctSns" placeholder="@username 또는 URL" />
+    <label>학교</label>
+    <input type="text" id="ctSchool" />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('contactModal')">취소</button>
+      <button class="btn-ok" onclick="saveContact()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 갤러리 이미지 파일 입력 (숨김) -->
+<input type="file" id="galleryFileInput" accept="image/*" style="display:none;" onchange="handleGalleryFile(event)" />
+
+<!-- 라이트박스 -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <span class="lb-close" onclick="document.getElementById('lightbox').classList.remove('show')">✕</span>
+  <img id="lbImg" src="" alt="" />
+  <button class="lb-del" id="lbDel" style="display:none;" onclick="deleteLbImage()">삭제</button>
+</div>
+
+<script>
+// ── 데이터 ─────────────────────────────────────────
+const ADMIN_ID = 'qwer1234';
+const ADMIN_PW = 'qwer1234';
+let isAdmin = false;
+let lbCurrentIdx = -1;
+
+const defaultData = {
+  siteName: 'Portfolio',
+  heroName: '홍길동',
+  heroTagline: '꿈을 향해 성장하는 고등학생',
+  heroBio: '안녕하세요! 저는 배움을 즐기고 도전을 두려워하지 않는 고등학생입니다. 다양한 경험과 프로젝트를 통해 성장해왔으며, 앞으로도 끊임없이 발전하고자 합니다.',
+  avatar: '',
+  aboutVal: '끊임없는 성장과 배움을 가장 중요한 가치로 여깁니다. 어떤 상황에서도 긍정적인 태도로 임하며, 주변 사람들과 함께 성장하는 것을 추구합니다.',
+  aboutGoal: '기술과 인문학의 경계를 넘나들며 사회에 긍정적인 영향을 미치는 사람이 되고 싶습니다. 대학에서 깊이 있는 학문을 탐구하겠습니다.',
+  aboutStrength: '문제를 다각도로 분석하는 논리적 사고력과 새로운 것에 빠르게 적응하는 능력이 제 강점입니다. 팀 프로젝트에서 협업과 소통을 중시합니다.',
+  aboutInterest: '인공지능, 환경 과학, 사회적 기업가 정신에 깊은 관심을 가지고 있습니다. 독서와 글쓰기, 음악 감상을 즐깁니다.',
+  activities: [
+    { date: '2024.09', title: '전국 과학탐구 올림피아드 은상 수상', desc: '전국 단위 과학 경시대회에서 팀 프로젝트 부문 은상 수상. 친환경 에너지 주제로 6개월간 연구 진행.' },
+    { date: '2024.03', title: '학생회 부회장', desc: '300명 규모 학교 행사 기획 및 운영. 학생들의 목소리를 학교 정책에 반영하는 데 기여.' },
+    { date: '2023.09', title: 'AI 코딩 동아리 창설 & 부장', desc: '방과 후 AI·프로그래밍 동아리 직접 창설. 30명 회원 운영, 교내 해커톤 개최.' }
+  ],
+  projects: [
+    { tag: '앱 개발', title: '학교 급식 알리미', desc: '학교 급식 메뉴를 알림으로 받아볼 수 있는 앱 개발. 500명 이상 학생이 사용 중.', skills: ['Python', 'Flutter', 'API'] },
+    { tag: '환경 프로젝트', title: '탄소 발자국 계산기', desc: '개인의 일상 속 탄소 배출량을 시각화하는 웹 서비스. 교내 환경 캠페인에 활용.', skills: ['HTML', 'CSS', 'JavaScript'] }
+  ],
+  gallery: [],
+  videos: [],
+  contact: { email: 'example@email.com', phone: '010-0000-0000', sns: '@my_instagram', school: '○○고등학교' }
+};
+
+let data = {};
+
+function loadData() {
+  const saved = localStorage.getItem('portfolioData');
+  data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
+}
+
+function saveData() {
+  localStorage.setItem('portfolioData', JSON.stringify(data));
+  showToast('저장 완료!');
+}
+
+// ── 렌더링 ─────────────────────────────────────────
+function render() {
+  document.getElementById('siteName').textContent = data.siteName || 'Portfolio';
+  document.getElementById('heroName').textContent = data.heroName;
+  document.getElementById('heroTagline').textContent = data.heroTagline;
+  document.getElementById('heroBio').textContent = data.heroBio;
+  document.title = (data.heroName || '홍길동') + ' 포트폴리오';
+  document.getElementById('footerText').textContent = '© 2026 ' + (data.heroName || '홍길동') + ' 포트폴리오. All rights reserved.';
+
+  if (data.avatar) {
+    document.getElementById('avatarImg').src = data.avatar;
+    document.getElementById('avatarImg').style.display = 'block';
+    document.getElementById('avatarPlaceholder').style.display = 'none';
+  } else {
+    document.getElementById('avatarImg').style.display = 'none';
+    document.getElementById('avatarPlaceholder').style.display = 'flex';
+  }
+
+  document.getElementById('aboutVal').textContent = data.aboutVal;
+  document.getElementById('aboutGoal').textContent = data.aboutGoal;
+  document.getElementById('aboutStrength').textContent = data.aboutStrength;
+  document.getElementById('aboutInterest').textContent = data.aboutInterest;
+
+  renderTimeline();
+  renderProjects();
+  renderGallery();
+  renderVideos();
+  renderContact();
+}
+
+function renderTimeline() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  (data.activities || []).forEach((act, i) => {
+    const el = document.createElement('div');
+    el.className = 'tl-item';
+    el.innerHTML = `
+      <div class="tl-dot"></div>
+      <div class="tl-date">${act.date}</div>
+      <div class="tl-title">${act.title}</div>
+      <div class="tl-desc">${act.desc}</div>
+      <div class="tl-controls edit-btn" style="display:none;position:static;margin-top:8px;gap:6px;">
+        <button class="btn-cancel" style="font-size:11px;padding:3px 10px;" onclick="openEditActivity(${i})">수정</button>
+        <button class="btn-cancel" style="font-size:11px;padding:3px 10px;color:var(--danger);" onclick="deleteActivity(${i})">삭제</button>
+      </div>`;
+    tl.appendChild(el);
+  });
+  if (isAdmin) {
+    tl.querySelectorAll('.tl-controls').forEach(el => el.style.display = 'flex');
+  }
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projectGrid');
+  grid.innerHTML = '';
+  (data.projects || []).forEach((prj, i) => {
+    const el = document.createElement('div');
+    el.className = 'project-card';
+    el.innerHTML = `
+      <span class="project-tag">${prj.tag}</span>
+      <div class="project-title">${prj.title}</div>
+      <div class="project-desc">${prj.desc}</div>
+      <div class="project-skills">${(prj.skills||[]).map(s=>`<span class="skill-pill">${s}</span>`).join('')}</div>
+      <div class="prj-controls" style="display:none;gap:6px;margin-top:1rem;">
+        <button class="btn-cancel" style="font-size:11px;padding:3px 10px;" onclick="openEditProject(${i})">수정</button>
+        <button class="btn-cancel" style="font-size:11px;padding:3px 10px;color:var(--danger);" onclick="deleteProject(${i})">삭제</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+  if (isAdmin) {
+    grid.querySelectorAll('.prj-controls').forEach(el => el.style.display = 'flex');
+  }
+}
+
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  (data.gallery || []).forEach((img, i) => {
+    const el = document.createElement('div');
+    el.className = 'gallery-item';
+    el.innerHTML = `<img src="${img}" alt="작품 ${i+1}" />`;
+    el.onclick = () => openLightbox(i);
+    grid.appendChild(el);
+  });
+  if (isAdmin) {
+    const addEl = document.createElement('button');
+    addEl.className = 'gallery-add-btn';
+    addEl.innerHTML = '<span>+</span>사진 추가';
+    addEl.onclick = () => document.getElementById('galleryFileInput').click();
+    grid.appendChild(addEl);
+  }
+  if (!data.gallery.length && !isAdmin) {
+    grid.innerHTML = '<div class="gallery-empty">아직 등록된 작품이 없습니다.</div>';
+  }
+}
+
+function renderVideos() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = '';
+  (data.videos || []).forEach((vid, i) => {
+    const el = document.createElement('div');
+    el.className = 'video-card';
+    const embedUrl = toEmbedUrl(vid.url);
+    el.innerHTML = `
+      <iframe class="video-frame" src="${embedUrl}" allowfullscreen></iframe>
+      <div class="video-info">
+        <div class="video-title">${vid.title}</div>
+        <div class="video-desc">${vid.desc}</div>
+        <div class="vid-controls" style="display:none;gap:6px;margin-top:8px;">
+          <button class="btn-cancel" style="font-size:11px;padding:3px 10px;color:var(--danger);" onclick="deleteVideo(${i})">삭제</button>
+        </div>
+      </div>`;
+    grid.appendChild(el);
+  });
+  if (isAdmin) {
+    grid.querySelectorAll('.vid-controls').forEach(el => el.style.display = 'flex');
+    const addEl = document.createElement('button');
+    addEl.className = 'video-add';
+    addEl.innerHTML = '<span style="font-size:24px;">▶</span>영상 추가';
+    addEl.onclick = openAddVideo;
+    grid.appendChild(addEl);
+  }
+  if (!data.videos.length && !isAdmin) {
+    grid.innerHTML = '<div class="gallery-empty">아직 등록된 영상이 없습니다.</div>';
+  }
+}
+
+function renderContact() {
+  const card = document.getElementById('contactCard');
+  const c = data.contact || {};
+  card.innerHTML = `
+    <div class="contact-row"><span class="contact-icon">✉️</span><span class="contact-label">이메일</span><span class="contact-value"><a href="mailto:${c.email}">${c.email||'-'}</a></span></div>
+    <div class="contact-row"><span class="contact-icon">📞</span><span class="contact-label">전화</span><span class="contact-value">${c.phone||'-'}</span></div>
+    <div class="contact-row"><span class="contact-icon">📸</span><span class="contact-label">SNS</span><span class="contact-value">${c.sns||'-'}</span></div>
+    <div class="contact-row"><span class="contact-icon">🏫</span><span class="contact-label">학교</span><span class="contact-value">${c.school||'-'}</span></div>`;
+}
+
+// ── 관리자 ─────────────────────────────────────────
+function toggleAdmin() {
+  if (isAdmin) { logout(); return; }
+  document.getElementById('loginId').value = '';
+  document.getElementById('loginPw').value = '';
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('loginModal').classList.add('show');
+}
+
+function doLogin() {
+  const id = document.getElementById('loginId').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  if (id === ADMIN_ID && pw === ADMIN_PW) {
+    isAdmin = true;
+    closeModal('loginModal');
+    document.body.classList.add('admin-mode');
+    document.getElementById('adminBtn').classList.add('active');
+    document.getElementById('adminBtn').textContent = '편집 중';
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('addActivityBtn').style.display = 'inline-block';
+    document.getElementById('addProjectBtn').style.display = 'inline-block';
+    document.getElementById('addVideoBtn').style.display = 'inline-block';
+    document.getElementById('editContactBtn').style.display = 'inline-block';
+    renderTimeline();
+    renderProjects();
+    renderGallery();
+    renderVideos();
+    showToast('관리자 모드 활성화');
+  } else {
+    document.getElementById('loginErr').textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
+  }
+}
+
+function logout() {
+  isAdmin = false;
+  document.body.classList.remove('admin-mode');
+  document.getElementById('adminBtn').classList.remove('active');
+  document.getElementById('adminBtn').textContent = '관리자';
+  document.getElementById('adminBar').classList.remove('show');
+  document.getElementById('addActivityBtn').style.display = 'none';
+  document.getElementById('addProjectBtn').style.display = 'none';
+  document.getElementById('addVideoBtn').style.display = 'none';
+  document.getElementById('editContactBtn').style.display = 'none';
+  renderTimeline();
+  renderProjects();
+  renderGallery();
+  renderVideos();
+}
+
+// ── 편집 함수 ─────────────────────────────────────
+function editHero() {
+  document.getElementById('editSiteName').value = data.siteName || '';
+  document.getElementById('editHeroName').value = data.heroName;
+  document.getElementById('editHeroTagline').value = data.heroTagline;
+  document.getElementById('editHeroBio').value = data.heroBio;
+  document.getElementById('heroModal').classList.add('show');
+}
+
+function saveHero() {
+  data.siteName = document.getElementById('editSiteName').value;
+  data.heroName = document.getElementById('editHeroName').value;
+  data.heroTagline = document.getElementById('editHeroTagline').value;
+  data.heroBio = document.getElementById('editHeroBio').value;
+  const fileInput = document.getElementById('editAvatarFile');
+  if (fileInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => { data.avatar = e.target.result; saveData(); render(); };
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    saveData(); render();
+  }
+  closeModal('heroModal');
+}
+
+function editAbout(field) {
+  const val = prompt('내용 수정:', data[field]);
+  if (val !== null) { data[field] = val; saveData(); render(); }
+}
+
+function openAddActivity() {
+  document.getElementById('actModalTitle').textContent = '활동 추가';
+  document.getElementById('actDate').value = '';
+  document.getElementById('actTitle').value = '';
+  document.getElementById('actDesc').value = '';
+  document.getElementById('actIdx').value = -1;
+  document.getElementById('activityModal').classList.add('show');
+}
+
+function openEditActivity(i) {
+  const act = data.activities[i];
+  document.getElementById('actModalTitle').textContent = '활동 수정';
+  document.getElementById('actDate').value = act.date;
+  document.getElementById('actTitle').value = act.title;
+  document.getElementById('actDesc').value = act.desc;
+  document.getElementById('actIdx').value = i;
+  document.getElementById('activityModal').classList.add('show');
+}
+
+function saveActivity() {
+  const idx = parseInt(document.getElementById('actIdx').value);
+  const item = {
+    date: document.getElementById('actDate').value,
+    title: document.getElementById('actTitle').value,
+    desc: document.getElementById('actDesc').value
+  };
+  if (idx === -1) { data.activities.unshift(item); }
+  else { data.activities[idx] = item; }
+  saveData(); closeModal('activityModal'); renderTimeline();
+}
+
+function deleteActivity(i) {
+  if (confirm('이 활동을 삭제하겠습니까?')) { data.activities.splice(i,1); saveData(); renderTimeline(); }
+}
+
+function openAddProject() {
+  document.getElementById('prjModalTitle').textContent = '프로젝트 추가';
+  document.getElementById('prjTag').value = '';
+  document.getElementById('prjTitle').value = '';
+  document.getElementById('prjDesc').value = '';
+  document.getElementById('prjSkills').value = '';
+  document.getElementById('prjIdx').value = -1;
+  document.getElementById('projectModal').classList.add('show');
+}
+
+function openEditProject(i) {
+  const prj = data.projects[i];
+  document.getElementById('prjModalTitle').textContent = '프로젝트 수정';
+  document.getElementById('prjTag').value = prj.tag;
+  document.getElementById('prjTitle').value = prj.title;
+  document.getElementById('prjDesc').value = prj.desc;
+  document.getElementById('prjSkills').value = (prj.skills||[]).join(', ');
+  document.getElementById('prjIdx').value = i;
+  document.getElementById('projectModal').classList.add('show');
+}
+
+function saveProject() {
+  const idx = parseInt(document.getElementById('prjIdx').value);
+  const item = {
+    tag: document.getElementById('prjTag').value,
+    title: document.getElementById('prjTitle').value,
+    desc: document.getElementById('prjDesc').value,
+    skills: document.getElementById('prjSkills').value.split(',').map(s=>s.trim()).filter(Boolean)
+  };
+  if (idx === -1) { data.projects.push(item); }
+  else { data.projects[idx] = item; }
+  saveData(); closeModal('projectModal'); renderProjects();
+}
+
+function deleteProject(i) {
+  if (confirm('이 프로젝트를 삭제하겠습니까?')) { data.projects.splice(i,1); saveData(); renderProjects(); }
+}
+
+function handleGalleryFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { data.gallery.push(ev.target.result); saveData(); renderGallery(); };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function openLightbox(i) {
+  lbCurrentIdx = i;
+  document.getElementById('lbImg').src = data.gallery[i];
+  document.getElementById('lbDel').style.display = isAdmin ? 'block' : 'none';
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function closeLightbox(e) {
+  if (e.target === document.getElementById('lightbox')) {
+    document.getElementById('lightbox').classList.remove('show');
+  }
+}
+
+function deleteLbImage() {
+  if (lbCurrentIdx >= 0 && confirm('이 사진을 삭제하겠습니까?')) {
+    data.gallery.splice(lbCurrentIdx, 1);
+    saveData(); renderGallery();
+    document.getElementById('lightbox').classList.remove('show');
+  }
+}
+
+function openAddVideo() {
+  document.getElementById('vidTitle').value = '';
+  document.getElementById('vidDesc').value = '';
+  document.getElementById('vidUrl').value = '';
+  document.getElementById('vidIdx').value = -1;
+  document.getElementById('videoModal').classList.add('show');
+}
+
+function saveVideo() {
+  const idx = parseInt(document.getElementById('vidIdx').value);
+  const item = {
+    title: document.getElementById('vidTitle').value,
+    desc: document.getElementById('vidDesc').value,
+    url: document.getElementById('vidUrl').value
+  };
+  if (idx === -1) { data.videos.push(item); }
+  else { data.videos[idx] = item; }
+  saveData(); closeModal('videoModal'); renderVideos();
+}
+
+function deleteVideo(i) {
+  if (confirm('이 영상을 삭제하겠습니까?')) { data.videos.splice(i,1); saveData(); renderVideos(); }
+}
+
+function openEditContact() {
+  const c = data.contact || {};
+  document.getElementById('ctEmail').value = c.email || '';
+  document.getElementById('ctPhone').value = c.phone || '';
+  document.getElementById('ctSns').value = c.sns || '';
+  document.getElementById('ctSchool').value = c.school || '';
+  document.getElementById('contactModal').classList.add('show');
+}
+
+function saveContact() {
+  data.contact = {
+    email: document.getElementById('ctEmail').value,
+    phone: document.getElementById('ctPhone').value,
+    sns: document.getElementById('ctSns').value,
+    school: document.getElementById('ctSchool').value
+  };
+  saveData(); closeModal('contactModal'); renderContact();
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function toEmbedUrl(url) {
+  if (!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if (yt) return 'https://www.youtube.com/embed/' + yt[1];
+  return url;
+}
+
+// ── 토스트 ──────────────────────────────────────────
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);padding:8px 20px;border-radius:20px;font-size:13px;z-index:500;opacity:0;transition:opacity 0.3s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 2000);
+}
+
+// ── 스크롤 애니메이션 ────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Enter 키 로그인 ─────────────────────────────────
+document.getElementById('loginPw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// ── 초기화 ──────────────────────────────────────────
+loadData();
+render();
+</script>
+</body>
+</html>
