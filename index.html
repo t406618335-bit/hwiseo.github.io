@@ -255,7 +255,7 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 0.5px solid var(--b
       <div class="hero-avatar-placeholder" id="avatarPlaceholder">👤</div>
       <img id="avatarImg" style="display:none;" />
     </div>
-    <h1 class="hero-name" id="heroName" contenteditable="false">홍길동</h1>
+    <h1 class="hero-name" id="heroName" contenteditable="false">이휘서</h1>
     <p class="hero-tagline" id="heroTagline" contenteditable="false">꿈을 향해 성장하는 고등학생</p>
     <p class="hero-bio" id="heroBio" contenteditable="false">
       안녕하세요! 저는 배움을 즐기고 도전을 두려워하지 않는 고등학생입니다. 다양한 경험과 프로젝트를 통해 성장해왔으며, 앞으로도 끊임없이 발전하고자 합니다.
@@ -285,7 +285,7 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 0.5px solid var(--b
     </div>
     <div class="about-card" style="position:relative;">
       <h3>강점</h3>
-      <p id="aboutStrength" contenteditable="false">문제를 다각도로 분석하는 논리적 사고력과 새로운 것에 빠르게 적응하는 능력이 제 강점입니다. 팀 프로젝트에서 협업과 소통을 중시합니다.</p>
+      <p id="aboutStrength" contenteditable="false">제 특기는 3D 모델링입니다. 다양한 소프트웨어를 사용하여 창의적인 디자인을 구현하며, 시각화와 프로토타이핑에 강점을 가지고 있습니다.</p>
       <button class="edit-btn" onclick="editAbout('aboutStrength')">편집</button>
     </div>
     <div class="about-card" style="position:relative;">
@@ -348,7 +348,7 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 0.5px solid var(--b
 </section>
 
 <footer>
-  <p id="footerText">© 2026 홍길동 포트폴리오. All rights reserved.</p>
+  <p id="footerText">© 2026 이휘서 포트폴리오. All rights reserved.</p>
 </footer>
 
 <!-- 관리자 바 -->
@@ -489,7 +489,7 @@ let lbCurrentIdx = -1;
 
 const defaultData = {
   siteName: 'Portfolio',
-  heroName: '홍길동',
+  heroName: '이휘서',
   heroTagline: '꿈을 향해 성장하는 고등학생',
   heroBio: '안녕하세요! 저는 배움을 즐기고 도전을 두려워하지 않는 고등학생입니다. 다양한 경험과 프로젝트를 통해 성장해왔으며, 앞으로도 끊임없이 발전하고자 합니다.',
   avatar: '',
@@ -529,8 +529,8 @@ function render() {
   document.getElementById('heroName').textContent = data.heroName;
   document.getElementById('heroTagline').textContent = data.heroTagline;
   document.getElementById('heroBio').textContent = data.heroBio;
-  document.title = (data.heroName || '홍길동') + ' 포트폴리오';
-  document.getElementById('footerText').textContent = '© 2026 ' + (data.heroName || '홍길동') + ' 포트폴리오. All rights reserved.';
+  document.title = (data.heroName || '이휘서') + ' 포트폴리오';
+  document.getElementById('footerText').textContent = '© 2026 ' + (data.heroName || '이휘서') + ' 포트폴리오. All rights reserved.';
 
   if (data.avatar) {
     document.getElementById('avatarImg').src = data.avatar;
